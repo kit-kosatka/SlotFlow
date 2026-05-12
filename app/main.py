@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.api.routers.auth import router as auth_router
+from app.api.routers.specialist import router as specialists_router
 from app.db.base import engine, Base
 from app import models
 
@@ -11,3 +12,4 @@ async def startup():
         await conn.run_sync(Base.metadata.create_all)
 
 app.include_router(auth_router)
+app.include_router(specialists_router)
