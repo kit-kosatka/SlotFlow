@@ -19,7 +19,8 @@ async def register(user: UserRegister, session: AsyncSession = Depends(get_db)):
     new_user = User(
         name=user.name,
         email=user.email,
-        password_hash=hashed_password
+        password_hash=hashed_password,
+        role=user.role,
     )
     session.add(new_user)
     await session.commit()
@@ -28,7 +29,7 @@ async def register(user: UserRegister, session: AsyncSession = Depends(get_db)):
 
 @router.post("/login", response_model=TokenResponse)
 async def login(user: UserLogin, session: AsyncSession = Depends(get_db)):
-    result = await session.execute(select(User).where(User.email == user.email))
+    result = await session.execute(select(User).where(User.email == user.username))
     existing_user = result.scalars().first()
     if not existing_user:
         raise HTTPException(status_code=400, detail="Email not registered")

@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from app.api.routers.auth import router as auth_router
 from app.api.routers.specialist import router as specialists_router
+from app.api.routers.slots import router as slots_router
+from app.api.routers.appointments import router as appointments_router
 from app.db.base import engine, Base
 from app import models
 
@@ -13,3 +15,5 @@ async def startup():
 
 app.include_router(auth_router)
 app.include_router(specialists_router)
+app.include_router(slots_router)
+app.include_router(appointments_router)

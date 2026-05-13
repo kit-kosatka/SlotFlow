@@ -5,9 +5,10 @@ class UserRegister(BaseModel):
     name: str
     email: EmailStr
     password: str
+    role: str = "client"
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    username: str
     password: str
 
 class TokenResponse(BaseModel):
