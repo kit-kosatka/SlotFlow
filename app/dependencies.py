@@ -13,7 +13,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 async def get_current_user(session: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)):
     payload = verify_token(token)
-    user_id = payload["sub"]
+    user_id = int(payload["sub"])
     result = await session.execute(select(User).where(User.id == user_id))
     user = result.scalars().first()
     if not user:

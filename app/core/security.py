@@ -14,7 +14,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def create_token(user_id: int) -> str:
     payload = {
-        "sub": user_id,
+        "sub": str(user_id),
         "exp": datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     }
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
@@ -23,9 +23,8 @@ def create_token(user_id: int) -> str:
 def verify_token(token: str) -> str:
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-    except JWTError:
+    except JWTError as e:
         raise HTTPException(status_code=401, detail="Invalid token")
     return payload
-
 
 
