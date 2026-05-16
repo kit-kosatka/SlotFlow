@@ -17,3 +17,4 @@ app.include_router(auth_router)
 app.include_router(specialists_router)
 app.include_router(slots_router)
 app.include_router(appointments_router)
+
