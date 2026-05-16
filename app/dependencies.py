@@ -11,9 +11,11 @@ from app.schemas.user import UserLogin
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
-async def get_current_user(session: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)):
+async def get_current_user(
+    session: AsyncSession = Depends(get_db), token: str = Depends(oauth2_scheme)
+):
     payload = verify_token(token)
-    user_id = int(payload["sub"])
+    user_id = int(str(payload["sub"]))
     result = await session.execute(select(User).where(User.id == user_id))
     user = result.scalars().first()
     if not user:
@@ -22,8 +24,9 @@ async def get_current_user(session: AsyncSession = Depends(get_db), token: str =
 
 
 def require_role(role: str):
-    def check_role(user = Depends(get_current_user)):
+    def check_role(user=Depends(get_current_user)):
         if user.role != role:
             raise HTTPException(status_code=403, detail="Forbidden")
         return user
+
     return check_role

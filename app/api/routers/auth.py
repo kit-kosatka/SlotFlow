@@ -6,8 +6,8 @@ from app.models import User
 from app.schemas.user import UserRegister, UserLogin, TokenResponse
 from app.core.security import hash_password, verify_password, create_token
 
-
 router = APIRouter(prefix="/auth", tags=["auth"])
+
 
 @router.post("/register")
 async def register(user: UserRegister, session: AsyncSession = Depends(get_db)):
@@ -27,6 +27,7 @@ async def register(user: UserRegister, session: AsyncSession = Depends(get_db)):
     await session.refresh(new_user)
     return {"message": "Registered successfully"}
 
+
 @router.post("/login", response_model=TokenResponse)
 async def login(user: UserLogin, session: AsyncSession = Depends(get_db)):
     result = await session.execute(select(User).where(User.email == user.username))
@@ -38,4 +39,3 @@ async def login(user: UserLogin, session: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Incorrect")
     token = create_token(existing_user.id)
     return {"access_token": token, "token_type": "bearer"}
-

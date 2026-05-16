@@ -1,7 +1,9 @@
 from pydantic import BaseModel, ConfigDict
 
+
 class AppointmentCreate(BaseModel):
     slot_id: int
+
 
 class AppointmentResponse(BaseModel):
     id: int

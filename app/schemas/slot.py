@@ -7,6 +7,7 @@ class SlotCreate(BaseModel):
     date: date_
     time: time_
 
+
 class SlotResponse(BaseModel):
     id: int
     specialist_id: int
@@ -14,10 +15,3 @@ class SlotResponse(BaseModel):
     time: time_
 
     model_config = ConfigDict(from_attributes=True)
-
-
-
-
-
-
-

@@ -5,6 +5,7 @@ class SpecialistCreate(BaseModel):
     specialty: str
     description: str
 
+
 class SpecialistResponse(BaseModel):
     id: int
     user_id: int
