@@ -7,6 +7,7 @@ Booking system API for specialists (cosmetology, legal, medical, etc.)
 - SQLAlchemy (async)
 - SQLite / PostgreSQL
 - JWT Authentication
+- Docker
 - pytest
 
 ## Features
@@ -16,17 +17,18 @@ Booking system API for specialists (cosmetology, legal, medical, etc.)
 - Appointment booking system
 - 9 automated tests
 
-## Installation
+## Running with Docker
 ```bash
 git clone https://github.com/kit-kosatka/SlotFlow.git
 cd SlotFlow
+docker-compose up --build
+```
+
+## Running locally
+```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-```
-
-## Running
-```bash
 uvicorn app.main:app --reload
 ```
 
