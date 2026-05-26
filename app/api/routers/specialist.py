@@ -16,10 +16,16 @@ async def get_specialists_route(session: AsyncSession = Depends(get_db)):
 
 @router.get("/{specialist_id}", response_model=SpecialistResponse)
 async def get_specialist_route(
-    specialist_id: int, session: AsyncSession = Depends(get_db)):
+    specialist_id: int, session: AsyncSession = Depends(get_db)
+):
     return await get_by_id(specialist_id, session)
 
 
 @router.post("/", response_model=SpecialistResponse)
-async def create_specialist_route(specialist_in: SpecialistCreate, user_id: int, session: AsyncSession = Depends(get_db), user: User = Depends(require_role("admin"))):
+async def create_specialist_route(
+    specialist_in: SpecialistCreate,
+    user_id: int,
+    session: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("admin")),
+):
     return await create_specialist(specialist_in, user_id, session)

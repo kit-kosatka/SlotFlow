@@ -1,16 +1,15 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 from app.models import User, Appointment, Slot
-from app.schemas.appointment import AppointmentCreate, AppointmentResponse
+from app.schemas.appointment import AppointmentCreate
 from sqlalchemy import select
-
 
 
 async def create_appointment(
     appointment: AppointmentCreate,
     user: User,
     session: AsyncSession,
-):
+) -> Appointment:
     result = await session.execute(select(Slot).where(Slot.id == appointment.slot_id))
     slot = result.scalars().first()
     if not slot:
@@ -27,10 +26,7 @@ async def create_appointment(
     return new_appointment
 
 
-
-async def get_my_appointments(
-    user: User, session: AsyncSession
-):
+async def get_my_appointments(user: User, session: AsyncSession) -> list[Appointment]:
     result = await session.execute(
         select(Appointment).where(Appointment.client_id == user.id)
     )
@@ -41,7 +37,7 @@ async def get_my_appointments(
 async def delete_appointment(
     appointment_id: int,
     session: AsyncSession,
-):
+) -> dict[str, str]:
     result = await session.execute(
         select(Appointment).where(Appointment.id == appointment_id)
     )

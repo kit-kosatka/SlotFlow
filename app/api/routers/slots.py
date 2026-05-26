@@ -29,4 +29,4 @@ async def delete_slot_route(
     session: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("specialist")),
 ):
-   return await delete_slot(slot_id, session)
+    return await delete_slot(slot_id, session)

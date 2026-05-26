@@ -4,7 +4,12 @@ from app.schemas.appointment import AppointmentCreate, AppointmentResponse
 from app.db.session import get_db
 from app.dependencies import get_current_user, require_role
 from app.models import User
-from app.services.appointment import create_appointment, delete_appointment, get_my_appointments
+from app.services.appointment import (
+    create_appointment,
+    delete_appointment,
+    get_my_appointments,
+)
+
 router = APIRouter(prefix="/appointments", tags=["appointments"])
 
 

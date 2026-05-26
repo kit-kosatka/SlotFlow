@@ -1,39 +1,24 @@
 # SlotFlow
 
-REST API for appointment booking with specialists. Built for cosmetology clinics, legal offices, medical centers — any service business.
+REST API for appointment booking with specialists — cosmetology clinics, legal offices, medical centers, and any other service business.
+
+Specialists manage their availability, clients book appointments. Admins keep everything running smoothly.
 
 ## Stack
 FastAPI · SQLAlchemy (async) · PostgreSQL · JWT · Docker · pytest
 
-## Architecture
-Service layer — routers handle HTTP, services handle business logic.
+## Highlights
+- Role-based access — admin, specialist, client
+- Specialists linked to procedures via many-to-many
+- Slot availability tracked automatically on booking and cancellation
+- Service layer architecture
+- Integration tests with isolated test database
 
 ## Quick Start
-
 ```bash
 git clone https://github.com/kit-kosatka/SlotFlow.git
 cd SlotFlow
 docker-compose up --build
 ```
 
-## API
-
-| Method | Endpoint | Access |
-|--------|----------|--------|
-| POST | `/auth/register` | Public |
-| POST | `/auth/login` | Public |
-| GET | `/specialists/` | Public |
-| GET | `/specialists/{id}` | Public |
-| POST | `/specialists/` | Admin |
-| GET | `/slots/` | Public |
-| POST | `/slots/` | Specialist |
-| DELETE | `/slots/{id}` | Specialist |
-| POST | `/appointments/` | Client |
-| GET | `/appointments/my` | Authenticated |
-| DELETE | `/appointments/{id}` | Admin |
-
-## Testing
-
-```bash
-pytest -v
-```
+API docs available at `/docs`
