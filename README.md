@@ -1,58 +1,39 @@
-# SlotFlow 📅
+# SlotFlow
 
-Booking system API for specialists (cosmetology, legal, medical, etc.)
+REST API for appointment booking with specialists. Built for cosmetology clinics, legal offices, medical centers — any service business.
 
-## Tech Stack
-- FastAPI
-- SQLAlchemy (async)
-- SQLite / PostgreSQL
-- JWT Authentication
-- Docker
-- pytest
+## Stack
+FastAPI · SQLAlchemy (async) · PostgreSQL · JWT · Docker · pytest
 
-## Features
-- Role-based access (admin, specialist, client)
-- Specialist profiles with procedures (many-to-many)
-- Time slot management
-- Appointment booking system
-- 9 automated tests
+## Architecture
+Service layer — routers handle HTTP, services handle business logic.
 
-## Running with Docker
+## Quick Start
+
 ```bash
 git clone https://github.com/kit-kosatka/SlotFlow.git
 cd SlotFlow
 docker-compose up --build
 ```
 
-## Running locally
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
+## API
 
-## API Endpoints
-### Auth
-- `POST /auth/register` — Register
-- `POST /auth/login` — Login
-
-### Specialists
-- `GET /specialists/` — List specialists
-- `GET /specialists/{id}` — Get specialist
-- `POST /specialists/` — Create specialist (admin)
-
-### Slots
-- `GET /slots/` — Available slots
-- `POST /slots/` — Create slot (specialist)
-- `DELETE /slots/{id}` — Delete slot (specialist)
-
-### Appointments
-- `POST /appointments/` — Book appointment (client)
-- `GET /appointments/my` — My appointments
-- `DELETE /appointments/{id}` — Cancel appointment (admin)
+| Method | Endpoint | Access |
+|--------|----------|--------|
+| POST | `/auth/register` | Public |
+| POST | `/auth/login` | Public |
+| GET | `/specialists/` | Public |
+| GET | `/specialists/{id}` | Public |
+| POST | `/specialists/` | Admin |
+| GET | `/slots/` | Public |
+| POST | `/slots/` | Specialist |
+| DELETE | `/slots/{id}` | Specialist |
+| POST | `/appointments/` | Client |
+| GET | `/appointments/my` | Authenticated |
+| DELETE | `/appointments/{id}` | Admin |
 
 ## Testing
+
 ```bash
 pytest -v
 ```
