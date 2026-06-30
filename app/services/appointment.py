@@ -1,8 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
-from app.models import User, Appointment, Slot
+from app.models import User, Appointment
 from app.schemas.appointment import AppointmentCreate
-from sqlalchemy import select
+from app.repository.appointment import AppointmentRepository
+from app.repository.slot import SlotRepository
 
 
 async def create_appointment(
@@ -10,47 +11,38 @@ async def create_appointment(
     user: User,
     session: AsyncSession,
 ) -> Appointment:
-    result = await session.execute(select(Slot).where(Slot.id == appointment.slot_id))
-    slot = result.scalars().first()
+    repo_appointment = AppointmentRepository(session)
+    repo_slot = SlotRepository(session)
+    slot = await repo_slot.get_by_id(appointment.slot_id)
     if not slot:
         raise HTTPException(status_code=404, detail="Slot not found")
     if slot.is_booked:
         raise HTTPException(status_code=400, detail="Slot already booked")
+    slot.is_booked = True
     new_appointment = Appointment(
         slot_id=appointment.slot_id, client_id=user.id, status="pending"
     )
-    slot.is_booked = True
-    session.add(new_appointment)
-    await session.commit()
-    await session.refresh(new_appointment)
+    new_appointment = await repo_appointment.create(new_appointment)
     return new_appointment
 
 
 async def get_my_appointments(user: User, session: AsyncSession) -> list[Appointment]:
-    result = await session.execute(
-        select(Appointment).where(Appointment.client_id == user.id)
-    )
-    appointments = result.scalars().all()
-    return appointments
+    repo_appointment = AppointmentRepository(session)
+    return await repo_appointment.get_my_appointments(user)
 
 
 async def delete_appointment(
     appointment_id: int,
     session: AsyncSession,
 ) -> dict[str, str]:
-    result = await session.execute(
-        select(Appointment).where(Appointment.id == appointment_id)
-    )
-    appointment = result.scalars().first()
+    repo_appointment = AppointmentRepository(session)
+    repo_slot = SlotRepository(session)
+    appointment = await repo_appointment.get_by_id(appointment_id)
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
-    slot_result = await session.execute(
-        select(Slot).where(Slot.id == appointment.slot_id)
-    )
-    slot = slot_result.scalars().first()
+    slot = await repo_slot.get_by_id(appointment.slot_id)
     if not slot:
         raise HTTPException(status_code=404, detail="Slot not found")
     slot.is_booked = False
-    await session.delete(appointment)
-    await session.commit()
+    await repo_appointment.delete(appointment)
     return {"message": "Appointment cancelled"}
